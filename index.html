@@ -1,0 +1,55 @@
+<!doctype html>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<style>
+	#messageArea {
+		list-style: none;
+		display: block;
+	}
+	.nameTag {
+		color: Blue;
+		font-size: small;
+	}
+	.messageTag {
+		color: Black;
+	}
+</style>
+<script>
+var socket = io();
+
+function send(){
+	var text = $('#chatText').val();
+	var user = $('#userName').val();
+	if (text.length == 0) return false;
+	socket.emit('chat message', 
+		{
+			'user': user,
+			'text': text
+		}
+	);
+	$('#chatText').val('');
+	return false;
+}
+
+socket.on('broadcast message', function(msg) {
+	$('#messageArea').append($('<li class="nameTag">').text(msg.user + ""));
+	$('#messageArea').append($('<li class="messageTag">').text(msg.text));
+});
+
+</script>
+<head>
+	<title>Web Chat</title>
+	<h1>Web Chat</h1>
+</head>
+<body>
+	<ul id='messageArea'>
+		
+	</ul>
+	<div>
+		<label for='userName'>Name: </label>
+		<input id='userName' type='text'/>
+		<label for='chatText'>Text: </label>
+		<input id='chatText' type='text'/>
+		<input id='sendButton' type='button' value='Send' onclick='send()'/>
+	</div>
+</body>

@@ -1,0 +1,9 @@
+{
+	"author":"Huang Haoyuan, Alfred",
+	"version": "0.0.0",
+	"description": "Initial implementation",
+	"dependencies": {
+		"express":"latest",
+		"socket.io":"latest"
+	}
+}
