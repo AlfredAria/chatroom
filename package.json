@@ -4,6 +4,7 @@
 	"description": "Initial implementation",
 	"dependencies": {
 		"express":"latest",
-		"socket.io":"latest"
+		"socket.io":"latest",
+		"sqlite3":"latest"
 	}
 }
