@@ -21,13 +21,14 @@ module.exports = {
 			name, createTime);
 	},
 	
-	/* callback(err, name) */
+	/* callback(err, room) Get room with name */
 	roomCheck: function(name, callback) {
-		db.get("select name from room where name = ?", name, function(err, row) {
-			callback(err, row == undefined ? undefined : row.name);
+		db.get("select * from room where name = ?", name, function(err, row) {
+			callback(err, row);
 		});
 	},
 	
+	/* Use user.id and room.id instead of user.name and room.name */
 	messageCreate: function(user, room, createTime, content) {
 		db.run("insert into message (user, room, createTime, content) values (?,?,?,?)",
 			user, room, createTime, content);
