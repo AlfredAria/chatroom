@@ -36,7 +36,7 @@ module.exports = {
 	
 	/* callback(err, messages) Return 10 newest messages in this room */
 	messageCheck: function(room, callback) {
-		db.all("select * from message where room = ? order by createTime limit 10",
+		db.all("select * from message where room = ? order by createTime desc limit 10",
 			room, function(err, rows) {
 				callback(err, rows);
 			});

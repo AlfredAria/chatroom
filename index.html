@@ -1,7 +1,19 @@
 <!doctype html>
-<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="socket.io-1.2.0.js"></script>
+<script src="jquery-1.11.1.js"></script>
+<script src="clientChat.js"></script>
 <style>
+	#horizontalLayoutContainer {
+
+	}
+	.regionContainer {
+		vertical-align:top;
+		border: 1px blue solid;
+		min-width: 400px;
+	}
+	.regionContainer > td {
+		max-height: 400px;
+	}
 	#messageArea {
 		list-style: none;
 		display: block;
@@ -20,54 +32,35 @@
 		font-size: small;
 	}
 </style>
-<script>
-var socket = io();
-
-function send(){
-	var text = $('#chatText').val();
-	var user = $('#userName').val();
-	if (text.length == 0) return false;
-	socket.emit('chat message', 
-		{
-			'user': user,
-			'text': text
-		}
-	);
-	$('#chatText').val('');
-	return false;
-}
-
-socket.on('broadcast message', function(msg) {
-	var nameTag = $('<li class="nameTag" style="display:none">').text(msg.user + "");
-	var msgTag = $('<li class="messageTag" style="display:none">').text(msg.text);
-	$('#messageArea').append(nameTag);
-	$('#messageArea').append(msgTag);
-	nameTag.fadeIn(200);
-	msgTag.fadeIn(200);
-});
-
-socket.on('enter room', function(msgPack) {
-	$(msgPack).each(function(index,value) {
-		$('#messageArea').append($('<li class="nameTag">').text(value.user + ""));
-		$('#messageArea').append($('<li class="timeTag">').text(value.createTime + ""));		
-		$('#messageArea').append($('<li class="messageTag">').text(value.content + ""));		
-	});
-});
-
-</script>
 <head>
 	<title>Web Chat</title>
 	<h1>Web Chat</h1>
 </head>
 <body>
-	<ul id='messageArea'>
-		
-	</ul>
-	<div>
-		<label for='userName'>Name: </label>
-		<input id='userName' type='text'/>
-		<label for='chatText'>Text: </label>
-		<input id='chatText' type='text'/>
-		<input id='sendButton' type='button' value='Send' onclick='send()'/>
-	</div>
+	<table id='horizontalLayoutContainer'>
+		<tr>
+			<td class='regionContainer'>
+             	<table>
+             		<tr>
+             		<td><label for='userName'>Name: </label></td>
+             		<td><input id='userName' type='text' placeholder="Input your name here"/></td>
+             		</tr>
+             		<tr>
+             		<td><label for='chatText'>Text: </label></td>
+             		<td><textarea id='chatText' rows="16" 
+						cols="50" wrap="hard" placeholder="Type your message...">
+					    </textarea><td>
+             		</tr>
+             		<tr>
+             		<td><input id='sendButton' type='button' value='Send' onclick='send()'/></td>
+             		</tr>
+             	</table>
+			</td>
+			<td class='regionContainer'>
+				<ul id='messageArea'>
+					<li></li>
+				</ul>
+			</td>
+		</tr>
+	</table>
 </body>
