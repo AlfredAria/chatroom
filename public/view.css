@@ -1,0 +1,21 @@
+body {
+	padding: 0 20px;
+	max-height: 600px;
+}
+
+#messageArea {
+	list-style: none;
+	overflow: scroll;
+	height: 400px;
+}
+.nameTag {
+	color: Blue;
+	font-size: small;
+}
+.messageTag {
+	color: Black;
+}
+.timeTag {
+	color: Green;
+	font-size: small;
+}

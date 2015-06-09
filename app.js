@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var url = require('url');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var db = require('./dbop.js');
@@ -12,8 +13,14 @@ app.get('/', function(req, res) {
 	res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/:data', function(req, res) {
+	res.sendFile(__dirname + '/index.html');
+});
+
 io.on('connection', function(socket){
-	console.log('A user has connected.');
+	
+	// Toimprove: Getting the parameter string this way is not straightforward enough
+	var room = url.parse(socket.request.headers.referer, true).query.room;
 	
 	// ~ Emit history 10 messages as the user enters the chat room
 	db.messageCheck("", function(err, rows) {
@@ -21,7 +28,6 @@ io.on('connection', function(socket){
 	});
 	
 	socket.on('chat message', function(msg){
-		
 		console.log('User ' + msg.user + ' said ' + msg.text);
 		// ~ Append received date to the message,
 		// ~ Store message to SQLite database

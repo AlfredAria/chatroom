@@ -50,7 +50,9 @@ function writeHistoryMessages(msgPack) {
 		$('#messageArea').append($('<li class="messageTag">').text(value.content + ""));		
 		*/
 		$('#messageArea li').eq(0).after($('<li class="messageTag">').text(value.content + ""));		
-		$('#messageArea li').eq(0).after($('<li class="timeTag">').text(value.createTime + ""));		
+		$('#messageArea li').eq(0).after($('<li class="timeTag">').text(
+			new Date(parseInt(value.createTime))
+		));		
 		$('#messageArea li').eq(0).after($('<li class="nameTag">').text(value.user + ""));	
 	});	
 }
