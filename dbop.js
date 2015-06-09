@@ -21,7 +21,7 @@ module.exports = {
 			name, createTime);
 	},
 	
-	/* callback(err, room) Get room with name */
+	/* callback(err, row) Get room with name */
 	roomCheck: function(name, callback) {
 		db.get("select * from room where name = ?", name, function(err, row) {
 			callback(err, row);

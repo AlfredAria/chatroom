@@ -22,20 +22,36 @@ io.on('connection', function(socket){
 	// Toimprove: Getting the parameter string this way is not straightforward enough
 	var room = url.parse(socket.request.headers.referer, true).query.room;
 	
-	// ~ Emit history 10 messages as the user enters the chat room
-	db.messageCheck("", function(err, rows) {
-		socket.emit("enter room", rows);
+	// todo: check the room first
+	db.roomCheck(room, function(err, row){
+		// todo
+		if (err) {}
+		else if (row.name == "") {}
+		else {}
 	});
 	
-	socket.on('chat message', function(msg){
+	// ~ Emit history 10 messages as the user enters the chat room
+	db.messageCheck("", function(err, rows) {
+		socket.emit("userJoin", rows);
+	});
+	
+	// todo
+	socket.on('nameCheck', null);
+	
+	// todo
+	socket.on('roomCreate', null);
+		
+	socket.on('userSpoke', function(msg){
 		console.log('User ' + msg.user + ' said ' + msg.text);
 		// ~ Append received date to the message,
 		// ~ Store message to SQLite database
 		db.messageCreate(msg.user, "", new Date(), msg.text);
 
 		// Change broadcast to emitting to selected users
-		io.emit('broadcast message', msg); // Sends to everybody
+		io.emit('roomMessage', msg); // Sends to everybody
 	});
+	
+	// userLeft
 	socket.on('disconnect', function() {
 		console.log('User has leaved.');
 	});

@@ -1,10 +1,21 @@
 
-/*
-	Dependency: jquery, socket.io
-*/
-
 var socket = io();
 
+// bind 'enter' key with 'send'
+$(function(){
+    $('#chatText').keydown(function(e){
+    	if (e.which == 13) {
+			send();
+			e.preventDefault();
+		}
+    });
+});
+
+/*
+	Client actions
+*/
+
+// userSpoke
 function send(){
 	var text = $('#chatText').val();
 	var user = $('#userName').val();
@@ -19,7 +30,7 @@ function send(){
 	
 	// Verify message
 	if (text.length == 0) return false;
-	socket.emit('chat message', 
+	socket.emit('userSpoke', 
 		{
 			'user': user,
 			'text': text
@@ -29,7 +40,33 @@ function send(){
 	return false;
 }
 
-socket.on('broadcast message', function(msg) {
+// nameCheck todo
+function nameCheck(name) {
+	// emit nameCheck event
+}
+
+// roomCreate todo
+function roomCreate(name) {
+	// emit roomCreate event
+}
+
+// shareLink todo
+function shareLink() {
+	// Create the access url link for the current page, so the user can send it to other people
+}
+
+/*
+	Server events
+*/
+
+socket.on('roomMessage', function(msg) {
+
+	//todo
+	if (msg.user === '' /* Me ? */) {}
+	else if (msg.user === '' /* Server ? */) {}
+	else /* Others */ {}
+	
+	
 	var nameTag = $('<li class="nameTag" style="display:none">').text(msg.user + "");
 	var msgTag = $('<li class="messageTag" style="display:none">').text(msg.text);
 	$('#messageArea').append(nameTag);
@@ -38,7 +75,28 @@ socket.on('broadcast message', function(msg) {
 	msgTag.fadeIn(200);
 });
 
-socket.on('enter room', writeHistoryMessages);
+socket.on('broadcastMessage', function(msg) {
+	// only use it now for debug. todo 
+	console.log("Broadcast message received: ");
+	console.log(msg);
+}); 
+
+//?? todo
+socket.on('serverDown', function() {
+	// only use it now for debug. 
+	console.log("serverDown");
+	console.log(msg);
+}); 
+
+//?? todo
+socket.on('serverUp', function() {
+	// only use it now for debug. 
+	console.log("serverUp");
+	console.log(msg);
+}); 
+
+
+socket.on('userJoin', writeHistoryMessages);
 
 // Put obtained messages to the page
 // Param: a pack of messages ordered from latest to earliest
@@ -57,12 +115,8 @@ function writeHistoryMessages(msgPack) {
 	});	
 }
 
-$(function(){
-    $('#chatText').keydown(function(e){
-    	if (e.which == 13) {
-			send();
-			e.preventDefault();
-		}
-    });
-    }
-);
+function clean() {
+	$('#messageArea').empty();
+	return false;
+}
+
