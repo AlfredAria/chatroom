@@ -1,56 +1,184 @@
 <!doctype html>
-<head>
+<html>
     <meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
- 	<title>Web Chat</title>
     <link rel="stylesheet" href="bootstrap-3.3.4-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="view.css">
     <script src="jquery-1.11.1.js"></script>
     <script src="bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
     <script src="socket.io-1.2.0.js"></script>
     <script src="clientChat.js"></script>
-	<link rel="stylesheet" href="view.css">
-</head>
+	<title>Web Chat</title>
 <body>
-	<h1>Web Chat</h1>
-	<div class="row">
+	
+	<div id="main">
+			<h1>Web Chat</h1>
+			<div id='alert'></div>
+			<div class="row">
 
-	    <div class="col-md-4">
-	    	<div class="panel panel-primary">
-	    			<div class='panel panel-heading'>
-	    				<h3 class="panel-title">Region</h3>
-	    			</div>
-                 	<div class='panel panel-body'>
-                 		<div>
-                 		<label for='userName'>Name: </label>
-                 		<input id='userName' type='text' placeholder="Input your name here" class="form-control"/>
-                 		</div>
-                 		<div>
-                 		<label for='chatText'>Text: </label>
-                 		<textarea id='chatText' cols="16" class="form-control" placeholder="Type your message..."></textarea>
-						</div>
-                 		<button id='sendButton' type='button' onclick='send()' class='btn btn-lg btn-primary'>Send</button>
-						<button id='cleanButton' type='button' onclick='clean()' class='btn btn-lg btn-info'>Clean Screen</button>	
-                 		</div>
-                 	</div>
-	    		</div>
+			    <div class="col-md-4">
+			    	<div class="panel panel-primary">
+			    			<div class='panel panel-heading'>
+			    				<h3 class="panel-title">Region</h3>
+			    			</div>
+		                 	<div class='panel panel-body'>
+								<form>
+		                 			<div class="form-group">
+		                 			<label for='userName'>Name: </label>
+		                 			<input id='userName' type='text' placeholder="Your Name" class="form-control" readonly="true"/>
+		                 			</div>
+		                 			<div class="form-group">
+		                 			<label for='roomName'>Room: </label>
+		                 			<input id='roomName' type='text' placeholder="Your Room" class="form-control" readonly="true"/>
+		                 			</div>
+		                 			<div class="form-group">
+		                 			<label for='chatText'>Text: </label>
+		                 			<textarea id='chatText' cols="16" class="form-control" placeholder="Type your message..."></textarea>
+									</div>
+									<div class="form-group">
+		                 				<button id='sendButton' type='button' onclick='return messageSend($("#chatText").val())' class='btn btn-lg btn-primary'>Send</button>
+										<button id='cleanButton' type='button' onclick='return clean()' class='btn btn-lg btn-info'>Clear Screen</button>	
+										<button id='leaveButton' type='button' onclick='return clean() + leaveRoom()' class='btn btn-lg btn-info'>Leave</button>	
+									</div>
+								</form>
+		                 	</div>
+		           </div>
+			    </div>
 
-
-	    <div class="col-md-8">
-	    	<div class="panel panel-info">
-	    		<div class="panel panel-heading">
-	    			<h3 class="panel-title">Messages</h3>
-	    		</div>
-	    		<div class="panel panel-body">
-	    			<ul id='messageArea'>
-	    				<li></li>
-	    			</ul>
-	    		</div>
-	    	</div>
-	    </div>
+			    <div class="col-md-8">
+			    	<div class="panel panel-info">
+			    		<div class="panel panel-heading">
+			    			<h3 class="panel-title">Messages  <span id='roomName'></span>  </h3>
+			    		</div>
+			    		<div id='messagePanel' class="panel panel-body">
+			    			<ul id='messageArea'>
+			    				<li></li>
+			    			</ul>
+			    		</div>
+			    	</div>
+			    </div>
 	    		
-	    	</div>
-	    </div>
+			    	</div>
+			    </div>
+			</div>
+			</div>
+		</div>
 	</div>
+	
+
+
+	<div id="LogIn" class="modal fade">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+				</div>
+				<div class="modal-body">
+
+					<form>
+      					<div class="form-group">
+      						<label for='userNameLogin'>Log In: </label>
+      						<input id='userNameLogin' type='text' placeholder="Your Name" class="form-control"/>
+      					</div>			
+      					<div class="form-group">
+      						<button id='b2' type='button' onclick='return loginUser($("#userNameLogin").val())' class='btn btn-lg btn-primary'>Log In</button>
+							<button id='b3' type='button' class='btn btn-lg btn-primary'>Sign up</button>
+      					</div>
+					</form>
+
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
+	
+	<div id="SignIn" class="modal fade">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+				</div>
+				<div class="modal-body">
+											
+					<form>
+      					<div class="form-group">
+      						<label for='userNameCreate'>Sign In: </label>
+      						<input id='userNameCreate' type='text' placeholder="Your Name" class="form-control"/>
+      					</div>
+      					<div class="form-group">
+      						<button id='b1' type='button' onclick='return createUser($("#userNameCreate").val())' class='btn btn-lg btn-primary'>Submit</button>
+							<button id='b4' type='button' class='btn btn-lg btn-primary'>Back</button>
+      					</div>
+					</form>
+
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="JoinRoom" class="modal fade">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				
+				<div class="modal-header">
+				</div>
+				<div class="modal-body">
+				
+					<form>
+  						<div class="form-group">
+  							<label for='roomSelect'>Pick a room, or create a new one: </label>
+  							<input id='roomSelect' type='text' placeholder="Type here or select from below" class="form-control"/>
+  						</div>
+						<div class="form-group">				
+							<ul id='roomList'>
+								
+							</ul>
+						</div>
+  						<div class="form-group">
+  							<button id='b2' type='button' 
+							onclick='return joinRoom($("#roomSelect").val())' class='btn btn-lg btn-primary'>Join</button>
+  						</div>
+					</form>
+				
+				</div>
+				<div class="modal-footer">
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+	<!-- <style>#input{width:300px} #output{width:300px;height:400px}</style>
+	<input id='input' type='text'></input>
+	<input id='enter' type='button' value='Enter' onclick='return check()'></input>
+	<br>
+	<textarea id='output'></textarea> -->
+			
+	<script>
+		var toggleModal = function (modal, on) {
+			if (on === true) {
+				$(modal).css('display','block');
+				$(modal).removeAttr('disabled');
+				$(modal).addClass('in');
+			}
+			else {
+				$(modal).css('display','none');
+				$(modal).attr('disabled','disabled');
+				$(modal).removeClass('in');
+			}
+		}
+		
+		$(function(){
+			$('#b3').on('click', function() {
+				toggleModal("#LogIn", false);
+				toggleModal("#SignIn", true);
+			});
+			$('#b4').on('click', function() {
+				toggleModal("#LogIn", true);
+				toggleModal("#SignIn", false);					
+			});
+		});
+	</script>
 </body>
+</html>

@@ -23,8 +23,8 @@ module.exports = {
 	
 	/* callback(err, row) Get room with name */
 	roomCheck: function(name, callback) {
-		db.get("select * from room where name = ?", name, function(err, row) {
-			callback(err, row);
+		db.get("select * from room where name = ?", name, function(err, room) {
+			callback(err, room);
 		});
 	},
 	
@@ -38,6 +38,7 @@ module.exports = {
 	messageCheck: function(room, callback) {
 		db.all("select * from message where room = ? order by createTime desc limit 10",
 			room, function(err, rows) {
+				console.log("Message check : " + rows);
 				callback(err, rows);
 			});
 	}

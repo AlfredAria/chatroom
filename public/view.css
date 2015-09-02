@@ -3,19 +3,28 @@ body {
 	max-height: 600px;
 }
 
+#messagePanel {
+	overflow: scroll;
+}
+
 #messageArea {
 	list-style: none;
-	overflow: scroll;
 	height: 400px;
 }
-.nameTag {
-	color: Blue;
-	font-size: small;
+
+#messageArea li {
+	
 }
-.messageTag {
-	color: Black;
-}
-.timeTag {
+
+#messageArea li .nameDate {
 	color: Green;
-	font-size: small;
+	font-size: small;	
+}
+
+#messageArea li .content {
+	color: Blue;
+}
+
+#messageArea li .history {
+	color: Grey;
 }
